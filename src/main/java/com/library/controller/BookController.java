@@ -4,6 +4,7 @@ import com.library.dto.BookDto;
 import com.library.service.BookService;
 import com.library.view.BookView;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class BookController {
@@ -26,7 +27,7 @@ public class BookController {
 
                 switch (choice) {
                     case 1 -> registerBook();
-//                    case 2 -> showAllBooks();
+                    case 2 -> showAllBooks();
 //                    case 3 -> searchBooks();
 //                    case 4 -> findBooksByAuthor();
 //                    case 5 -> findBooksByCategory();
@@ -77,6 +78,12 @@ public class BookController {
         } catch (IllegalArgumentException e) {
             view.showError(e.getMessage());
         }
+    }
+
+    private void showAllBooks() {
+        List<BookDto> bookList = bookService.
+                findAll();
+        view.showBooks(bookList, "전체 도서 목록");
     }
 
 }

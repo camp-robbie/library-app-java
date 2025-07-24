@@ -39,4 +39,13 @@ public class BookService {
 
         return new BookDto(savedBook);
     }
+
+    public List<BookDto> findAll() {
+        return bookRepository.findAll()
+                .stream()
+                .map(BookDto::new)
+                .toList();
+    }
+
+
 }
