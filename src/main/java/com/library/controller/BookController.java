@@ -31,7 +31,7 @@ public class BookController {
                     case 3 -> searchBooks();
                     case 4 -> findBooksByAuthor();
                     case 5 -> findBooksByCategory();
-//                    case 6 -> deleteBook();
+                    case 6 -> deleteBook();
                     case 0 -> {
                         view.showGoodbye();
                         return;
@@ -119,6 +119,15 @@ public class BookController {
         } catch (Exception e) {
             view.showError(e.getMessage());
         }
+    }
+
+    private void deleteBook() {
+        view.promptForBookId();
+        Long id = scanner.nextLong();
+        scanner.nextLine();
+
+        bookService.deleteById(id);
+        view.showSuccess(id + "번의 도서가 정상적으로 삭제되었습니다.");
     }
 
 }

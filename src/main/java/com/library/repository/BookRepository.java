@@ -38,4 +38,12 @@ public class BookRepository {
                 .filter(book -> book.getCategory() != null && book.getCategory().equalsIgnoreCase(category))
                 .toList();
     }
+
+    public void deleteById(Long id) {
+        BOOK_STORE.remove(id);
+    }
+
+    public boolean existsById(Long id) {
+        return BOOK_STORE.containsKey(id);
+    }
 }

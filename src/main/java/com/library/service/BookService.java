@@ -67,4 +67,12 @@ public class BookService {
                 .map(BookDto::new)
                 .toList();
     }
+
+    public void deleteById(Long id) {
+        // 삭제하려는 도서가 없는지 확인
+        if(!bookRepository.existsById(id)) {
+            throw new IllegalArgumentException("존재하지 않는 도서입니다 : " + id);
+        }
+        bookRepository.deleteById(id);
+    }
 }
