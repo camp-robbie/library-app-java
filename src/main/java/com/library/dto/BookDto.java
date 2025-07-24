@@ -2,7 +2,7 @@ package com.library.dto;
 
 import com.library.entity.Book;
 
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class BookDto {
     private Long id;
@@ -10,7 +10,7 @@ public class BookDto {
     private String author;
     private String isbn;
     private String category;
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     public BookDto(Book book) {
         this.id = book.getId();
@@ -18,7 +18,7 @@ public class BookDto {
         this.author = book.getAuthor();
         this.isbn = book.getIsbn();
         this.category = book.getCategory();
-        this.createdAt = book.getCreatedAt();
+        this.createdAt = book.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     public Long getId() {
@@ -41,7 +41,7 @@ public class BookDto {
         return category;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 

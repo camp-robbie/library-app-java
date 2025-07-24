@@ -7,27 +7,22 @@ import com.library.annotation.Service;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class SimpleContainer {
     private final Map<Class<?>, Object> beans = new HashMap<>();
 
     public void initialize() {
         try {
-            Scanner scanner = new Scanner(System.in);
-            beans.put(Scanner.class, scanner);
+            // Repository bean 생성
+            createBean("com.library.repository.BookRepository");
 
             // Service bean 생성
             createBean("com.library.service.BookService");
 
-            // Repository bean 생성
-            createBean("com.library.repository.BookRepository");
-
-            // View bean 생성
-            createView("com.library.view.BookView");
-
             // Controller bean 생성
             createBean("com.library.controller.BookController");
+            createBean("com.library.controller.StaticController");
 
         } catch (Exception e) {
             throw new RuntimeException("Container 초기화 실패", e);
@@ -37,6 +32,22 @@ public class SimpleContainer {
     @SuppressWarnings("unchecked")
     public <T> T getBean(Class<T> clazz) {
         return (T) beans.get(clazz);
+    }
+
+    public Map<String, Object> getControllerMap() {
+        return beans.values().stream()
+                .filter(bean -> bean.getClass().isAnnotationPresent(Controller.class))
+                .collect(Collectors.toMap(
+                        bean -> {
+                            Controller controller = bean.getClass().getAnnotation(Controller.class);
+                            String value = controller.value();
+                            if(value != null && !value.isEmpty()) {
+                                return value;
+                            }
+                            return bean.getClass().getSimpleName().replace("Controller", "").toLowerCase();
+                        },
+                        bean -> bean
+                ));
     }
 
     private void createBean(String className) throws Exception {
@@ -68,10 +79,4 @@ public class SimpleContainer {
         beans.put(clazz, instance);
     }
 
-    private void createView(String className) throws Exception {
-        Class<?> clazz = Class.forName(className);
-        Object instance = clazz.getDeclaredConstructor().newInstance();
-        beans.put(clazz, instance);
-        System.out.println("View 새성: " + clazz.getSimpleName());
-    }
 }
