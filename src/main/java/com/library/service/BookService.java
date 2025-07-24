@@ -1,12 +1,12 @@
 package com.library.service;
 
-import com.library.annotation.Service;
+
 import com.library.dto.BookDto;
 import com.library.entity.Book;
 import com.library.repository.BookRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class BookService {
@@ -21,17 +21,8 @@ public class BookService {
         // ISBN Duplicate Check
             // 전체 도서 조회
             // 순회하면서 현재 입력받은 isbn 값을 가진 책이 있는지 확인
-        List<Book> bookList = bookRepository.findAll();
 
-        boolean isDuplicate = false;
-        for (Book book : bookList) {
-            if(Objects.equals(book.getIsbn(), isbn)) {
-                isDuplicate = true;
-                break;
-            }
-        }
-
-        if(isDuplicate) {
+        if(bookRepository.findByIsbn(isbn).isPresent()) {
             throw new IllegalArgumentException("이미 등록된 ISBN : " + isbn);
         }
 
@@ -50,21 +41,21 @@ public class BookService {
     }
 
     public List<BookDto> findByKeyword(String keyword) {
-        return bookRepository.findTitleContaining(keyword)
+        return bookRepository.findByTitleContainingIgnoreCase(keyword)
                 .stream()
                 .map(BookDto::new)
                 .toList();
     }
 
     public List<BookDto> findByAuthor(String author) {
-        return bookRepository.findByAuthor(author)
+        return bookRepository.findByAuthorIgnoreCase(author)
                 .stream()
                 .map(BookDto::new)
                 .toList();
     }
 
     public List<BookDto> findByCategory(String category) {
-        return bookRepository.findByCategory(category)
+        return bookRepository.findByCategoryIgnoreCase(category)
                 .stream()
                 .map(BookDto::new)
                 .toList();

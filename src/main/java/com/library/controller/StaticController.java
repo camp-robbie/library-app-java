@@ -1,17 +1,18 @@
 package com.library.controller;
 
-import com.library.annotation.Controller;
-import com.library.annotation.GetMapping;
-import com.library.server.HttpRequest;
-import com.library.server.HttpResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class StaticController {
 
     // GET /- 메인 페이지
     @GetMapping("/")
-    public HttpResponse getIndexPage(HttpRequest request) {
-        String html = """
+    @ResponseBody
+    public String getIndexPage() {
+        return """
             <!DOCTYPE html>
             <html>
             <head>
@@ -233,12 +234,5 @@ public class StaticController {
             </body>
             </html>
             """;
-
-        HttpResponse response = new HttpResponse();
-        response.statusCode = 200;
-        response.statusMessage = "OK";
-        response.body = html;
-        response.headers.put("Content-Type", "text/html; charset=UTF-8");
-        return response;
     }
 }

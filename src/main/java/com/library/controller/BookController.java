@@ -1,16 +1,16 @@
 package com.library.controller;
 
-import com.library.annotation.Controller;
-import com.library.annotation.DeleteMapping;
-import com.library.annotation.GetMapping;
-import com.library.annotation.PostMapping;
-import com.library.dto.BookDto;
-import com.library.server.HttpRequest;
-import com.library.server.HttpResponse;
-import com.library.server.JsonUtils;
-import com.library.service.BookService;
 
-import java.util.Map;
+import com.library.dto.BookDto;
+import com.library.dto.BookCreateRequest;
+import com.library.service.BookService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 
 @Controller
 public class BookController {
@@ -21,61 +21,39 @@ public class BookController {
     }
 
     @PostMapping("/api/books")
-    public HttpResponse registerBook(HttpRequest request) {
-        try {
-            JsonUtils.BookRequest bookRequest = JsonUtils.parseBookRequest(request.getBody());
-
-            BookDto bookDto = bookService.save(bookRequest.getTitle(), bookRequest.getAuthor(), bookRequest.getIsbn(), bookRequest.getCategory());
-
-            return HttpResponse.created(JsonUtils.toJson(bookDto));
-        } catch (IllegalArgumentException e) {
-            return HttpResponse.badRequest(e.getMessage());
-        }
+    public ResponseEntity<BookDto> registerBook(
+            @RequestBody BookCreateRequest request
+    ) {
+        BookDto bookDto = bookService.save(request.getTitle(), request.getAuthor(), request.getIsbn(), request.getCategory());
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookDto);
     }
 
+    // ?keyword=
     @GetMapping("/api/books")
-    public HttpResponse searchBooks(HttpRequest request) {
-        try {
-            Map<String, String> params = request.getQueryParams();
-
-            if(params.containsKey("search")) {
-                // 제목 검색
-                return HttpResponse.ok(JsonUtils.toJson(
-                        bookService.findByKeyword(params.get("search"))
-                ));
-            } else if(params.containsKey("author")) {
-                // 저자 검색
-                return HttpResponse.ok(JsonUtils.toJson(
-                        bookService.findByAuthor(params.get("author"))
-                ));
-            } else if(params.containsKey("category")) {
-                // 카테고리 검색
-                return HttpResponse.ok(JsonUtils.toJson(
-                        bookService.findByCategory(params.get("category"))
-                ));
-            } else {
-                // 전체 조회
-                return HttpResponse.ok(JsonUtils.toJson(
-                        bookService.findAll()
-                ));
-            }
-
-        } catch (Exception e) {
-            return HttpResponse.badRequest(e.getMessage());
+    public ResponseEntity<List<BookDto>> searchBooks(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String author,
+            @RequestParam(required = false) String category
+    ) {
+        List<BookDto> bookDtoList;
+        if(search != null && !search.trim().isEmpty()) {
+            bookDtoList = bookService.findByKeyword(search);
+        }else if(author != null && !author.trim().isEmpty()) {
+            bookDtoList = bookService.findByAuthor(author);
+        }else if(category != null && !category.trim().isEmpty()) {
+            bookDtoList = bookService.findByCategory(category);
+        } else {
+            bookDtoList = bookService.findAll();
         }
+
+        return ResponseEntity.ok(bookDtoList);
     }
 
+    // 204
     @DeleteMapping("/api/books/{id}")
-    public HttpResponse deleteBook(HttpRequest request) {
-        try {
-            String path = request.getPath();
-            Long id = Long.parseLong(path.substring("/api/books/".length()));
-
-            bookService.deleteById(id);
-            return HttpResponse.ok(id + "번의 도서를 정상적으로 삭제했습니다.");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+        bookService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

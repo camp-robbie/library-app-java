@@ -1,8 +1,16 @@
 package com.library.entity;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
+@Entity
+@Table(name = "books")
 public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String author;
@@ -18,33 +26,5 @@ public class Book {
         this.isbn = isbn;
         this.category = category;
         this.createdAt = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 }

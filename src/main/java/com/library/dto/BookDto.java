@@ -1,9 +1,11 @@
 package com.library.dto;
 
 import com.library.entity.Book;
+import lombok.Getter;
 
 import java.time.format.DateTimeFormatter;
 
+@Getter
 public class BookDto {
     private Long id;
     private String title;
@@ -19,30 +21,6 @@ public class BookDto {
         this.isbn = book.getIsbn();
         this.category = book.getCategory();
         this.createdAt = book.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
     }
 
     @Override
