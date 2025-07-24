@@ -47,5 +47,10 @@ public class BookService {
                 .toList();
     }
 
-
+    public List<BookDto> findByKeyword(String keyword) {
+        return bookRepository.findTitleContaining(keyword)
+                .stream()
+                .map(BookDto::new)
+                .toList();
+    }
 }

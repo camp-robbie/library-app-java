@@ -28,7 +28,7 @@ public class BookController {
                 switch (choice) {
                     case 1 -> registerBook();
                     case 2 -> showAllBooks();
-//                    case 3 -> searchBooks();
+                    case 3 -> searchBooks();
 //                    case 4 -> findBooksByAuthor();
 //                    case 5 -> findBooksByCategory();
 //                    case 6 -> deleteBook();
@@ -81,9 +81,20 @@ public class BookController {
     }
 
     private void showAllBooks() {
-        List<BookDto> bookList = bookService.
-                findAll();
+        List<BookDto> bookList = bookService.findAll();
         view.showBooks(bookList, "전체 도서 목록");
+    }
+
+    private void searchBooks() {
+        try {
+            view.promptForKeyword();
+            String keyword = scanner.nextLine();
+
+            List<BookDto> bookList = bookService.findByKeyword(keyword);
+            view.showBooks(bookList, "검색 결과");
+        } catch (Exception e) {
+            view.showError(e.getMessage());
+        }
     }
 
 }

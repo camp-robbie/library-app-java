@@ -23,4 +23,10 @@ public class BookRepository {
         BOOK_STORE.put(book.getId(), book);
         return book;
     }
+
+    public List<Book> findTitleContaining(String keyword) {
+        return BOOK_STORE.values().stream()
+                .filter(book -> book.getTitle() != null && book.getTitle().contains(keyword))
+                .toList();
+    }
 }
