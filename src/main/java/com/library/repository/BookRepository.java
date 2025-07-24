@@ -1,0 +1,26 @@
+package com.library.repository;
+
+import com.library.entity.Book;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+
+public class BookRepository {
+    private static final Map<Long, Book> BOOK_STORE = new HashMap<>();
+    private static final AtomicLong ID_GENERATOR = new AtomicLong(1);
+
+    public List<Book> findAll() {
+        return new ArrayList<>(BOOK_STORE.values());
+    }
+
+    public Book save(Book book) {
+        if(book.getId() == null) {
+            book.setId(ID_GENERATOR.getAndIncrement());
+        }
+        BOOK_STORE.put(book.getId(), book);
+        return book;
+    }
+}
