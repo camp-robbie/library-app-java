@@ -1,5 +1,6 @@
 package com.library.service;
 
+import com.library.annotation.Service;
 import com.library.dto.BookDto;
 import com.library.entity.Book;
 import com.library.repository.BookRepository;
@@ -7,6 +8,7 @@ import com.library.repository.BookRepository;
 import java.util.List;
 import java.util.Objects;
 
+@Service
 public class BookService {
     private final BookRepository bookRepository;
 

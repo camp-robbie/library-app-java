@@ -1,10 +1,15 @@
 package com.library.repository;
 
+import com.library.annotation.Repository;
 import com.library.entity.Book;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Repository
 public class BookRepository {
     private static final Map<Long, Book> BOOK_STORE = new HashMap<>();
     private static final AtomicLong ID_GENERATOR = new AtomicLong(1);

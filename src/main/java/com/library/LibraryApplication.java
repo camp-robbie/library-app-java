@@ -1,21 +1,27 @@
 package com.library;
 
+import com.library.container.SimpleContainer;
 import com.library.controller.BookController;
-import com.library.repository.BookRepository;
 import com.library.service.BookService;
-import com.library.view.BookView;
-
-import java.util.Scanner;
 
 public class LibraryApplication {
     public static void main(String[] args) {
         System.out.println("== 순수 Java 도서 관리 APP ==");
 
-        BookService bookService = new BookService(new BookRepository());
-        addDummyData(bookService);
+        try {
+            SimpleContainer container = new SimpleContainer();
+            container.initialize();
 
-        BookController controller = new BookController(new BookView(), new Scanner(System.in), bookService);
-        controller.start();
+            BookService bookService = container.getBean(BookService.class);
+            addDummyData(bookService);
+
+            BookController bookController = container.getBean(BookController.class);
+            bookController.start();
+
+        } catch (Exception e) {
+            System.out.println("애플리케이션 실행 오류 : " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private static void addDummyData(BookService bookService) {

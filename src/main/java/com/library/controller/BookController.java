@@ -1,5 +1,6 @@
 package com.library.controller;
 
+import com.library.annotation.Controller;
 import com.library.dto.BookDto;
 import com.library.service.BookService;
 import com.library.view.BookView;
@@ -7,6 +8,7 @@ import com.library.view.BookView;
 import java.util.List;
 import java.util.Scanner;
 
+@Controller
 public class BookController {
     private final BookView view;
     private final Scanner scanner;
