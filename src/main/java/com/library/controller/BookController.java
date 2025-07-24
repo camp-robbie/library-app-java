@@ -29,7 +29,7 @@ public class BookController {
                     case 1 -> registerBook();
                     case 2 -> showAllBooks();
                     case 3 -> searchBooks();
-//                    case 4 -> findBooksByAuthor();
+                    case 4 -> findBooksByAuthor();
 //                    case 5 -> findBooksByCategory();
 //                    case 6 -> deleteBook();
                     case 0 -> {
@@ -92,6 +92,18 @@ public class BookController {
 
             List<BookDto> bookList = bookService.findByKeyword(keyword);
             view.showBooks(bookList, "검색 결과");
+        } catch (Exception e) {
+            view.showError(e.getMessage());
+        }
+    }
+
+    private void findBooksByAuthor() {
+        try {
+            view.promptForAuthorSearch();
+            String author = scanner.nextLine();
+
+            List<BookDto> bookList = bookService.findByAuthor(author);
+            view.showBooks(bookList, author + " 작가의 도서");
         } catch (Exception e) {
             view.showError(e.getMessage());
         }

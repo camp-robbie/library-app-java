@@ -53,4 +53,11 @@ public class BookService {
                 .map(BookDto::new)
                 .toList();
     }
+
+    public List<BookDto> findByAuthor(String author) {
+        return bookRepository.findByAuthor(author)
+                .stream()
+                .map(BookDto::new)
+                .toList();
+    }
 }

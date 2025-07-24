@@ -2,10 +2,7 @@ package com.library.repository;
 
 import com.library.entity.Book;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class BookRepository {
@@ -27,6 +24,12 @@ public class BookRepository {
     public List<Book> findTitleContaining(String keyword) {
         return BOOK_STORE.values().stream()
                 .filter(book -> book.getTitle() != null && book.getTitle().contains(keyword))
+                .toList();
+    }
+
+    public List<Book> findByAuthor(String author) {
+        return BOOK_STORE.values().stream()
+                .filter(book -> book.getAuthor() != null && book.getAuthor().equalsIgnoreCase(author))
                 .toList();
     }
 }
