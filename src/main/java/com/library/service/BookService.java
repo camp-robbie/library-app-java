@@ -60,4 +60,11 @@ public class BookService {
                 .map(BookDto::new)
                 .toList();
     }
+
+    public List<BookDto> findByCategory(String category) {
+        return bookRepository.findByCategory(category)
+                .stream()
+                .map(BookDto::new)
+                .toList();
+    }
 }

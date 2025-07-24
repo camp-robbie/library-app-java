@@ -32,4 +32,10 @@ public class BookRepository {
                 .filter(book -> book.getAuthor() != null && book.getAuthor().equalsIgnoreCase(author))
                 .toList();
     }
+
+    public List<Book> findByCategory(String category) {
+        return BOOK_STORE.values().stream()
+                .filter(book -> book.getCategory() != null && book.getCategory().equalsIgnoreCase(category))
+                .toList();
+    }
 }
